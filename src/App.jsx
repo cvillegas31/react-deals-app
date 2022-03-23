@@ -28,9 +28,6 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    console.log("===============================================");
-
-    console.log(places);
 
     const filtered = places.filter((place) => Number(place.rating) > rating);
 

@@ -13,9 +13,6 @@ const Map = ({ coords, places, setCoords, setBounds, setChildClicked, weatherDat
   const matches = useMediaQuery('(min-width:600px)');
   const classes = useStyles();
 
-  console.log("----------------------------------");
-  console.log(`${APIKEY}`);
-
   return (
     <div className={classes.mapContainer}>
       <GoogleMapReact

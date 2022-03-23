@@ -4,8 +4,6 @@ import axios from 'axios';
 const APIKEY = import.meta.env.REACT_APP_RAPID_API_TRAVEL_API_KEY;
 
 export const getPlacesData = async (type, sw, ne) => {
-  console.log("++++++++++++++++++++++++++");
-  console.log(`${APIKEY}`);
 
   try {
     const { data: { data } } = await axios.get(`https://travel-advisor.p.rapidapi.com/${type}/list-in-boundary`, {
