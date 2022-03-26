@@ -9,14 +9,44 @@ import useStyles from './styles.js';
 
 const APIKEY = import.meta.env.REACT_APP_RAPID_API_TRAVEL_API_KEY;
 
-const Map = ({ coords, places, setCoords, setBounds, setChildClicked, weatherData }) => {
+const Map = ({ coords, places, setCoords, setBounds, setChildClicked, setMap }) => {
   const matches = useMediaQuery('(min-width:600px)');
   const classes = useStyles();
+
+  const apiHasLoaded = ((map, mapsApi) => {
+    console.log("++++++++++++++++++++++++++++++");
+
+    let placesService = new mapsApi.places.PlacesService(map);
+
+    console.log(coords.lat);
+    console.log(coords.lng);
+
+    const markerLatLng = new mapsApi.LatLng(coords.lat, coords.lng);
+
+    const placesRequest = {
+      location: markerLatLng,
+      // radius: '30000', // Cannot be used with rankBy. Pick your poison!
+      type: ['convenience_store', 'supermarkete'], // List of types: https://developers.google.com/places/supported_types
+      query: 'grocery',
+      rankBy: mapsApi.places.RankBy.DISTANCE, // Cannot be used with radius.
+    };
+
+    placesService.textSearch(placesRequest, ((response) => {
+      console.log("===================================")
+      console.log(response)
+      //places = response;
+    }));
+
+  });
+
 
   return (
     <div className={classes.mapContainer}>
       <GoogleMapReact
-        bootstrapURLKeys={{ key: 'AIzaSyBTjN0CP-rhi__o39cqDLJpvzNAZmmwRuM' }}
+        bootstrapURLKeys={{
+          key: 'AIzaSyBTjN0CP-rhi__o39cqDLJpvzNAZmmwRuM',
+          libraries: ['places', 'directions']
+        }}
         defaultCenter={coords}
         center={coords}
         defaultZoom={14}
@@ -27,6 +57,7 @@ const Map = ({ coords, places, setCoords, setBounds, setChildClicked, weatherDat
           setBounds({ ne: e.marginBounds.ne, sw: e.marginBounds.sw });
         }}
         onChildClick={(child) => setChildClicked(child)}
+        onGoogleApiLoaded={({ map, maps }) => apiHasLoaded(map, maps)}
       >
         {places.length && places.map((place, i) => (
           <div
@@ -48,14 +79,10 @@ const Map = ({ coords, places, setCoords, setBounds, setChildClicked, weatherDat
                 </Paper>
               )}
           </div>
-        ))}
-        {weatherData?.list?.length && weatherData.list.map((data, i) => (
-          <div key={i} lat={data.coord.lat} lng={data.coord.lon}>
-            <img src={`http://openweathermap.org/img/w/${data.weather[0].icon}.png`} height="70px" />
-          </div>
-        ))}
-      </GoogleMapReact>
-    </div>
+        ))
+        }
+      </GoogleMapReact >
+    </div >
   );
 };
 

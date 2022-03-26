@@ -13,9 +13,12 @@ const App = () => {
   const [coords, setCoords] = useState({});
   const [bounds, setBounds] = useState(null);
 
-  const [weatherData, setWeatherData] = useState([]);
+  //const [weatherData, setWeatherData] = useState([]);
+
+
   const [filteredPlaces, setFilteredPlaces] = useState([]);
   const [places, setPlaces] = useState([]);
+
 
   const [autocomplete, setAutocomplete] = useState(null);
   const [childClicked, setChildClicked] = useState(null);
@@ -38,16 +41,44 @@ const App = () => {
     if (bounds) {
       setIsLoading(true);
 
-      getWeatherData(coords.lat, coords.lng)
-        .then((data) => setWeatherData(data));
+      //getWeatherData(coords.lat, coords.lng)
+      //.then((data) => setWeatherData(data));
 
-      getPlacesData(type, bounds.sw, bounds.ne)
+      console.log("Cuando se carga esto");
+
+      /*getPlacesData(type, bounds.sw, bounds.ne)
         .then((data) => {
           setPlaces(data.filter((place) => place.name && place.num_reviews > 0));
           setFilteredPlaces([]);
           setRating('');
           setIsLoading(false);
-        });
+        });*/
+
+      //let placesService = new mapsApi.places.PlacesService(map);
+      console.log("===================================antes")
+      let placesService = new google.maps.places.PlacesService(document.getElementById("Map"));
+      console.log(placesService)
+
+      console.log(coords.lat);
+      console.log(coords.lng);
+
+      const markerLatLng = new google.maps.LatLng(coords.lat, coords.lng);
+
+      const placesRequest = {
+        location: markerLatLng,
+        // radius: '30000', // Cannot be used with rankBy. Pick your poison!
+        type: ['convenience_store', 'supermarkete'], // List of types: https://developers.google.com/places/supported_types
+        query: 'grocery',
+        rankBy: google.maps.places.RankBy.DISTANCE, // Cannot be used with radius.
+      };
+
+      placesService.textSearch(placesRequest, ((response) => {
+        console.log("===================================222")
+        console.log(response)
+        //places = response;
+      }));
+
+
     }
   }, [bounds, type]);
 
@@ -83,7 +114,6 @@ const App = () => {
             setCoords={setCoords}
             coords={coords}
             places={filteredPlaces.length ? filteredPlaces : places}
-            weatherData={weatherData}
           />
         </Grid>
       </Grid>

@@ -15,7 +15,7 @@ export const getPlacesData = async (type, sw, ne) => {
       },
       headers: {
         'x-rapidapi-host': 'travel-advisor.p.rapidapi.com',
-        'x-rapidapi-key': 'b923bb80dbmsh1aad711046b4364p18aa4ajsnf65f4d7b453c'
+        'x-rapidapi-key': ''
       },
     });
 
@@ -34,7 +34,7 @@ export const getWeatherData = async (lat, lng) => {
         params: { lat, lon: lng },
         headers: {
           'x-rapidapi-host': 'community-open-weather-map.p.rapidapi.com',
-          'x-rapidapi-key': 'b923bb80dbmsh1aad711046b4364p18aa4ajsnf65f4d7b453c'
+          'x-rapidapi-key': ''
         }
 
 
